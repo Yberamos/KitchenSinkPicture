@@ -107,8 +107,87 @@ public class MediaDemo extends Demo {
                                                 ToastBar.showErrorMessage("you should to capture video first");
                                             }
                                         });
-  
-        demoContainer.addAll(downloadButton, playOfflineButton, playOnlineButton, captureVideoButton, playCaptured);
+        Component choosePicture = createVideoComponent("Choose image", "Choose an image from your library", FontImage.createMaterial(FontImage.MATERIAL_PLAY_CIRCLE_FILLED, iconStyle),
+                                        e-> Display.getInstance().openGallery(evt -> {
+                                            if (evt != null && evt.getSource() != null)
+                                            {
+                                                for (String filePath : (String[]) evt.getSource())
+                                                {
+                                                    try
+                                                    {
+                                                        if (filePath != null)
+                                                        {
+                                                            ToastBar.showErrorMessage("The image path is : " + filePath);
+                                                        }
+                                                        else {
+                                                            ToastBar.showErrorMessage("File path was null");
+                                                        }
+
+                                                    } catch (Exception exception)
+                                                    {
+                                                        Log.e(exception);
+                                                        ToastBar.showErrorMessage("There were an error! Check the logs");
+                                                    }
+                                                }
+                                            }
+                                        }, Display.GALLERY_IMAGE_MULTI));
+        Component takePicture = createVideoComponent("Take image", "Take a picture with your camera", FontImage.createMaterial(FontImage.MATERIAL_PLAY_CIRCLE_FILLED, iconStyle),
+                                        e-> {
+                                            String filePath = Capture.capturePhoto(-1, -1);
+                                            if (filePath != null)
+                                            {
+                                                ToastBar.showErrorMessage("The image path is : " + filePath);
+                                            }
+                                            else {
+                                                ToastBar.showErrorMessage("File path was null");
+                                            }
+                                        });
+        Component choosePictureTreat = createVideoComponent("Choose image (scale)", "Choose an image from your library", FontImage.createMaterial(FontImage.MATERIAL_PLAY_CIRCLE_FILLED, iconStyle),
+                                        e-> Display.getInstance().openGallery(evt -> {
+                                            if (evt != null && evt.getSource() != null)
+                                            {
+                                                for (String filePath : (String[]) evt.getSource())
+                                                {
+                                                    try
+                                                    {
+                                                        if (filePath != null)
+                                                        {
+                                                            ToastBar.showErrorMessage("The image path is : " + filePath);
+                                                            Image img = Image.createImage(filePath);
+                                                            img.scaledWidth((int) (100 * 0.4));
+                                                        }
+                                                        else {
+                                                            ToastBar.showErrorMessage("File path was null");
+                                                        }
+
+                                                    } catch (Exception exception)
+                                                    {
+                                                        Log.e(exception);
+                                                        ToastBar.showErrorMessage("There were an error! Check the logs");
+                                                    }
+                                                }
+                                            }
+                                        }, Display.GALLERY_IMAGE_MULTI));
+        Component takePictureTreat = createVideoComponent("Take image (scale)", "Take a picture with your camera", FontImage.createMaterial(FontImage.MATERIAL_PLAY_CIRCLE_FILLED, iconStyle),
+                                        e-> {
+                                            String filePath = Capture.capturePhoto(-1, -1);
+                                            if (filePath != null)
+                                            {
+                                                ToastBar.showErrorMessage("The image path is : " + filePath);
+                                                try {
+                                                    Image img = Image.createImage(filePath);
+                                                    img.scaledWidth((int) (100 * 0.4));
+                                                } catch (IOException ex) {
+                                                    Log.e(ex);
+                                                    ToastBar.showErrorMessage("There were an error! Check the logs");
+                                                }
+                                            }
+                                            else {
+                                                ToastBar.showErrorMessage("File path was null");
+                                            }
+                                        });
+
+        demoContainer.addAll(/*downloadButton, playOfflineButton, playOnlineButton, captureVideoButton, playCaptured,*/ choosePicture, takePicture, choosePictureTreat, takePictureTreat);
         return demoContainer;
     }
 
@@ -172,5 +251,18 @@ public class MediaDemo extends Demo {
         videoComponent.setUIIDLine1("MediaComponentLine1");
         videoComponent.setUIIDLine2("MediaComponentLine2");
         return videoComponent;
+    }
+
+    private void treatNewScaledImage(String filePath)
+    {
+        // Si Pas d'erreur jusqu'ici, je pense qu'on est bon donc j'ajoute l'image
+        // directement.
+        try
+        {
+            Image img = Image.createImage(filePath);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
