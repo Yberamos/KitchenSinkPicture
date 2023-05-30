@@ -252,17 +252,4 @@ public class MediaDemo extends Demo {
         videoComponent.setUIIDLine2("MediaComponentLine2");
         return videoComponent;
     }
-
-    private void treatNewScaledImage(String filePath)
-    {
-        // Si Pas d'erreur jusqu'ici, je pense qu'on est bon donc j'ajoute l'image
-        // directement.
-        try
-        {
-            Image img = Image.createImage(filePath);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
 }
